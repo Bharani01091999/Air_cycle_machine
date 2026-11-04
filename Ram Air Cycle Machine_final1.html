@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ram Air Cycle Machine</title>
+<style>
+:root{--bg:#eceff3;--cd:#fbfcfd;--tx:#161b22;--mu:#5d6773;--bd:#d3d9e0;--c:#1f5fc4;--t:#0c8f7e;--ok:#1f7a3d;--wn:#b42318;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141a;--cd:#171c24;--tx:#e6eaf0;--mu:#97a2b0;--bd:#2a313c;--c:#6aa5ff;--t:#3fd1ba;--ok:#58d17f;--wn:#ff7b72;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10141a;--cd:#171c24;--tx:#e6eaf0;--mu:#97a2b0;--bd:#2a313c;--c:#6aa5ff;--t:#3fd1ba;--ok:#58d17f;--wn:#ff7b72;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:14px 12px 28px}
+h1{font-size:1.35rem;margin:4px 0 2px;letter-spacing:-.01em}
+h2{font-size:1rem;margin:0 0 8px}
+p.mu,.mu{color:var(--mu);font-size:.85rem;margin:0 0 12px}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:12px}
+.status{padding:9px 11px;border-radius:8px;border:1px solid;margin-bottom:10px;font-size:.9rem}
+.status.ok{color:var(--ok);border-color:var(--ok)}.status.wn{color:var(--wn);border-color:var(--wn)}
+.grp{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin-bottom:10px}
+.grp>h3{grid-column:1/-1;margin:2px 0 0;font-size:.9rem;display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.k{border-left:3px solid var(--bd);padding:2px 0 2px 8px}
+.k small{display:block;color:var(--mu);font-size:.75rem}
+.k b{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.k u{text-decoration:none;color:var(--mu);font-size:.75rem;margin-left:3px}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.charts .card{margin:0}
+svg{width:100%;height:auto;display:block;overflow:visible}
+.gr{stroke:var(--bd);stroke-width:1}.zl{stroke:var(--mu);stroke-width:1;stroke-dasharray:4 3}
+.tk{fill:var(--mu);font-size:9.5px}
+.lg{font-size:.8rem;color:var(--mu);margin:0 0 4px}
+.lg i{font-style:normal;margin-right:10px;white-space:nowrap}
+.lg i:before{content:"";display:inline-block;width:14px;border-top:2px solid currentColor;vertical-align:middle;margin-right:4px}
+.lg i.d:before{border-top-style:dashed}
+.ins{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+label{display:block;font-size:.78rem;color:var(--mu)}
+input,textarea,select{width:100%;margin-top:2px;padding:7px 8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx);font:inherit;font-size:.95rem}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;min-height:170px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+details{margin-bottom:12px}summary{cursor:pointer;font-weight:600;padding:8px 2px}
+:focus-visible{outline:2px solid var(--c);outline-offset:1px}
+.bar{display:flex;align-items:center;gap:12px;margin:0 0 12px;flex-wrap:wrap;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:8px 0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.eq{border-left:3px solid var(--bd);padding:2px 0 2px 10px;margin:0 0 12px}.eq p{margin:0 0 3px}.eq small{display:block;color:var(--mu);font-size:.8rem;line-height:1.45}.eq b{display:block;margin-bottom:2px}.rf{font-size:.8rem;color:var(--mu);line-height:1.5}
+button.go{background:var(--tx);color:var(--cd);border:0;border-radius:8px;padding:11px 22px;font:inherit;font-weight:600;cursor:pointer}
+.fm p{margin:0 0 10px;font-family:ui-serif,Georgia,"Times New Roman",serif;font-size:.95rem;line-height:1.75}
+.fm b{font-family:system-ui,sans-serif;font-size:.85rem}
+.fl{stroke:var(--mu);stroke-width:2;fill:none}.bx{fill:var(--bg);stroke:var(--mu);stroke-width:2}
+.tu{fill:var(--t);fill-opacity:.2;stroke:var(--t);stroke-width:2}.cm{fill:var(--c);fill-opacity:.2;stroke:var(--c);stroke-width:2}
+.sh{stroke:var(--tx);stroke-width:5;stroke-linecap:round}.hl{stroke:var(--wn);stroke-width:2.5;fill:none}.zz{stroke:var(--wn);stroke-width:2;fill:none}
+.mk{fill:var(--mu)}.mh{fill:var(--wn)}.dt{fill:var(--tx)}.dn{fill:var(--cd);font-size:10px;font-weight:700}
+.sv{fill:var(--tx);font-size:10.5px}.sm{fill:var(--mu);font-size:10px}.lb{fill:var(--tx);font-size:11px;font-weight:600}
+.e0{fill:#2f9e5b;color:#2f9e5b}.e1{fill:#d9a514;color:#d9a514}.e2{fill:#e0662f;color:#e0662f}.e3{fill:#c0392b;color:#c0392b}.e4{fill:#7b61c4;color:#7b61c4}.e5{fill:#3b82c4;color:#3b82c4}
+.e6{fill:#1aa6b7;color:#1aa6b7}.e7{fill:#b83280;color:#b83280}
+#env rect{cursor:pointer}.ct{stroke:var(--tx);stroke-width:1.1;fill:none;opacity:.85;pointer-events:none}
+.cl{fill:var(--tx);font-size:8.5px;paint-order:stroke;stroke:var(--cd);stroke-width:2.5px;pointer-events:none}
+.bt{padding:3px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--cd);color:var(--tx);font:inherit;font-size:.8rem;cursor:pointer}
+</style></head><body><main>
+<h1>Ram air cycle machine</h1>
+<p class="mu">Ram air → turbine → heat exchanger → duct → compressor → ambient. The turbine drives the compressor; this finds the airflow where their work matches, then checks the air can actually leave.</p>
+
+<div class="bar"><button class="go">Calculate</button><span class="mu" id="stamp" style="margin:0"></span></div>
+<section class="card"><div id="res"></div></section>
+<section class="card"><h2>System layout</h2><div id="sys" style="max-width:540px;margin:0 auto"></div><p class="mu" style="margin:6px 0 0">Numbers 0–6 mark the stations used in the table and equations. Each shows total temperature Tt and total pressure Pt. Values update when you press Calculate.</p></section>
+<section class="card" id="exp" style="display:none"><h2>Export (CSV)</h2><div style="display:flex;flex-wrap:wrap;gap:8px"><button class="bt" data-ex="summary">Point summary</button><button class="bt" data-ex="stations">Station table</button><button class="bt" data-ex="solutions">All matching solutions</button><button class="bt" data-ex="envelope">Flight envelope grid</button></div><p class="mu" id="exmsg" style="margin:8px 0 0">Each button saves one CSV file after you confirm. Press Calculate first; the envelope grid is available once it has finished.</p></section>
+<section class="card"><h2>Flight envelope</h2><p class="mu" style="margin:0 0 8px">Every cell is solved at that Mach number and altitude (Indian Standard Tropical Atmosphere, pressure altitude) with the inputs and curves above. The heat source temperature, required load, areas, curves and efficiencies are held constant; the fixed pressure drops can scale (see Envelope pressure drops). Ram air alone is used wherever it meets the load (Operating mode).</p><label style="max-width:540px;margin:0 auto 8px">Contour lines<select id="ov"><option value="0">None</option><option value="1" selected>Heat absorbed (kW)</option><option value="2">Air flow (kg/s)</option><option value="3">Heat exchanger inlet temperature (°C)</option></select></label>
+<div id="env" style="max-width:540px;margin:0 auto"></div><div id="hov" class="mu" style="max-width:540px;margin:6px auto 0;min-height:3em"></div><div id="why" class="mu" style="max-width:540px;margin:8px auto 0">Click a cell to load that Mach number and altitude into the calculation above. Hover over a cell, or touch and drag, to see the reason.</div></section>
+<section class="charts">
+ <div class="card"><h2>Compressor data</h2><p class="lg"><i style="color:var(--c)">MFP (left)</i><i class="d" style="color:var(--c)">η<sub>c</sub> (right)</i></p><div id="c1"></div></div>
+ <div class="card"><h2>Turbine data</h2><p class="lg"><i style="color:var(--t)">MFP (left)</i><i class="d" style="color:var(--t)">η<sub>t</sub> (right)</i></p><div id="c2"></div></div>
+ <div class="card"><h2>Flow match</h2><p class="mu" style="margin:0 0 6px">Compressor flow mismatch (%) along the work-balanced path. The match is where the line crosses zero.</p><div id="c3"></div></div>
+</section>
+
+<details open style="margin-top:12px"><summary>Cycle inputs</summary><div class="card"><div class="ins" id="ins"></div>
+<p class="mu" style="margin:10px 0 0">MFP = ṁ·√Tt / Pt with ṁ in kg/s, Tt in K and Pt in Pa. This SI form gives values around 1e-5 to 4e-5. For other units, set the factor so that data MFP = factor × this value.</p>
+<h3 style="font-size:.95rem;margin:16px 0 4px">Optional: flow areas and loss coefficients</h3>
+<p class="mu">The values filled in are placeholders; ram-air direct cooling needs the exit duct area. Clear an area and its K to go back to the fixed kPa drop above. An area alone adds Mach number and choke margin for that section. An area together with K makes that section’s pressure drop follow the flow: ΔPt = K · q, where q is the dynamic pressure at the section inlet (equation 13). The fixed kPa value is then ignored for that section.</p>
+<div class="ins" id="ins2"></div>
+<label style="margin-top:8px">Heat exchanger pressure drop against velocity (one pair per line: velocity in m/s, pressure drop in kPa)<textarea id="hxt" spellcheck="false" style="min-height:110px"></textarea></label>
+<p class="mu" style="margin:4px 0 0">Used when “Heat exchanger pressure drop model” is set to the velocity curve. It needs the heat exchanger flow area. The curve is scaled by the local air density divided by the reference density, and extended past its ends with ΔP ∝ V².</p>
+<h3 style="font-size:.95rem;margin:16px 0 4px">Optional: measured point</h3>
+<p class="mu">Enter any values you measured at the flight condition above. The dashboard compares them with the model result under “Model vs measured”.</p>
+<div class="ins" id="ins3"></div></div></details>
+
+<details open><summary>Empirical data</summary><div class="card" style="margin-bottom:12px"><b>Load maps from a file</b><p class="mu" style="margin:4px 0 8px">CSV or text with three columns: MFP, pressure ratio, temperature ratio. A header row naming the columns is optional. Each file fills the π and τ boxes of its machine and recalculates.</p><div class="ins"><label>Compressor file<input type="file" id="fc" accept=".csv,.txt,.tsv"></label><label>Turbine file<input type="file" id="ft" accept=".csv,.txt,.tsv"></label></div><div class="mu" id="fmsg" style="margin-top:6px"></div></div>
+<div class="two" id="dat"></div><p class="mu">Two columns per curve, one row per line. The π curves are MFP against π with π on the horizontal axis, as in your maps; the solver uses π as the unknown, so flat (choked) sections are fine. The temperature-ratio curves are τ against MFP, also with the ratio on the horizontal axis. Efficiency is calculated from π and τ and plotted with the π curve. Pick the other column order if your file has it reversed. Linear interpolation, ends held flat. Placeholder data: replace it with yours.</p></details>
+<details open><summary>Equations used, in calculation order</summary><div class="card fm">
+<div class="eq"><b>1. Ram inlet (stations 0→1)</b><p>T<sub>t0</sub> = T<sub>a</sub>(1 + 0.2M²) &nbsp; P<sub>t0</sub> = P<sub>a</sub>(1 + 0.2M²)<sup>3.5</sup><br>T<sub>t1</sub> = T<sub>t0</sub> &nbsp; P<sub>t1</sub> = η<sub>r</sub>P<sub>t0</sub>, where η<sub>r</sub> is the recovery you enter, reduced by × [1 − 0.075(M − 1)<sup>1.35</sup>] above Mach 1 if that option is on</p><small>Slowing the air to rest raises its temperature and pressure (the 0.2 and 3.5 come from γ = 1.4). No heat is added, so T<sub>t</sub> stays constant; the inlet only loses some pressure. The supersonic reduction is the MIL-E-5007D relation as quoted in B. Refs: A, B, C.</small></div>
+<div class="eq"><b>2. Corrected flow (MFP)</b><p>MFP = ṁ√T<sub>t</sub> / P<sub>t</sub> (× unit factor)<br>Turbine: ṁ = MFP<sub>t</sub>(π<sub>t</sub>) · P<sub>t1</sub> / √T<sub>t1</sub></p><small>One number that combines flow, temperature and pressure, so a machine map holds for any inlet condition. The turbine curve gives MFP for a chosen π<sub>t</sub>, and that fixes the airflow ṁ. Refs: A, D.</small></div>
+<div class="eq"><b>3. Isentropic efficiency</b><p>η<sub>t</sub> = (T<sub>t1</sub> − T<sub>t2</sub>) / (T<sub>t1</sub> − T<sub>t2s</sub>), T<sub>t2s</sub> = T<sub>t1</sub>π<sub>t</sub><sup>−(γ−1)/γ</sup><br>η<sub>c</sub> = (T<sub>t5s</sub> − T<sub>t4</sub>) / (T<sub>t5</sub> − T<sub>t4</sub>), T<sub>t5s</sub> = T<sub>t4</sub>π<sub>c</sub><sup>(γ−1)/γ</sup></p><small>Compares real temperature change with the ideal, loss-free one for the same pressure ratio. Your temperature-ratio curves give τ at the MFP of each machine, and the dashboard calculates η = (1 − τ<sub>t</sub>) / (1 − π<sub>t</sub><sup>−(γ−1)/γ</sup>) for the turbine and η = (π<sub>c</sub><sup>(γ−1)/γ</sup> − 1) / (τ<sub>c</sub> − 1) for the compressor. Refs: A, B, E.</small></div>
+<div class="eq"><b>4. Turbine (1→2): temperature and pressure</b><p>τ<sub>t</sub> = T<sub>t2</sub>/T<sub>t1</sub> = 1 − η<sub>t</sub>[1 − π<sub>t</sub><sup>−(γ−1)/γ</sup>]<br>T<sub>t2</sub> = τ<sub>t</sub>T<sub>t1</sub> &nbsp; P<sub>t2</sub> = P<sub>t1</sub>/π<sub>t</sub></p><small>The turbine expands the air, so pressure and temperature both fall. Rearranging equation 3 gives the temperature ratio. Refs: A, B.</small></div>
+<div class="eq"><b>5. Turbine work</b><p>w<sub>t</sub> = c<sub>p</sub>(T<sub>t1</sub> − T<sub>t2</sub>) = c<sub>p</sub>T<sub>t1</sub>η<sub>t</sub>[1 − π<sub>t</sub><sup>−(γ−1)/γ</sup>] &nbsp; (kJ/kg)<br>W<sub>t</sub> = ṁ w<sub>t</sub> &nbsp; (kW, with c<sub>p</sub> in kJ/kg·K)</p><small>Energy the air gives up as it cools. Only the fraction η<sub>m</sub> reaches the shaft (bearing and windage losses). Refs: A, E.</small></div>
+<div class="eq"><b>6. Heat exchanger (2→3)</b><p>T<sub>t3</sub> = T<sub>t2</sub> + ΔT &nbsp; P<sub>t3</sub> = P<sub>t2</sub> − ΔP<sub>hx</sub><br>Q = ṁ c<sub>p</sub> ΔT</p><small>ΔT is either fixed, or ε(T<sub>src</sub> − T<sub>t2</sub>) with ε the effectiveness and T<sub>src</sub> the heat source temperature, so the air only cools the load if it is colder than the source. Q is the heat absorbed, the cooling the machine provides. Refs: B, E.</small></div>
+<div class="eq"><b>7. Duct (3→4)</b><p>T<sub>t4</sub> = T<sub>t3</sub> &nbsp; P<sub>t4</sub> = P<sub>t3</sub> − ΔP<sub>duct</sub></p><small>Adiabatic duct: only friction loss in pressure. Ref: A.</small></div>
+<div class="eq"><b>8. Compressor (4→5): temperature and pressure</b><p>τ<sub>c</sub> = T<sub>t5</sub>/T<sub>t4</sub> = 1 + (π<sub>c</sub><sup>(γ−1)/γ</sup> − 1) / η<sub>c</sub><br>T<sub>t5</sub> = τ<sub>c</sub>T<sub>t4</sub> &nbsp; P<sub>t5</sub> = π<sub>c</sub>P<sub>t4</sub></p><small>Compression heats the air; a less efficient compressor heats it more for the same pressure ratio. Refs: A, B.</small></div>
+<div class="eq"><b>9. Compressor work</b><p>w<sub>c</sub> = c<sub>p</sub>(T<sub>t5</sub> − T<sub>t4</sub>) = c<sub>p</sub>T<sub>t4</sub>(π<sub>c</sub><sup>(γ−1)/γ</sup> − 1) / η<sub>c</sub> &nbsp; (kJ/kg)<br>W<sub>c</sub> = ṁ w<sub>c</sub> &nbsp; (kW)</p><small>Work the shaft must supply. It grows with the inlet temperature T<sub>t4</sub>, which is why heating the air before the compressor makes the compressor harder to drive. Refs: A, E.</small></div>
+<div class="eq"><b>10. Exit duct (5→6) and exhaust</b><p>T<sub>t6</sub> = T<sub>t5</sub> &nbsp; P<sub>t6</sub> = P<sub>t5</sub> − ΔP<sub>exit</sub><br>Air can leave if P<sub>t6</sub> &gt; P<sub>a</sub>. &nbsp; M<sub>exit</sub> = √(5[(P<sub>t6</sub>/P<sub>a</sub>)<sup>1/3.5</sup> − 1])</p><small>The air leaves at ambient static pressure, so the compressor outlet total pressure must exceed ambient. The surplus becomes exit velocity; above P<sub>t6</sub>/P<sub>a</sub> = 1.893 the exit is choked. Refs: C.</small></div>
+<div class="eq"><b>11. Ram inlet capture area</b><p>A = ṁ / (ρ<sub>a</sub>V), ρ<sub>a</sub> = P<sub>a</sub>/(287 T<sub>a</sub>), V = M√(1.4 · 287 · T<sub>a</sub>)</p><small>Freestream air tube the inlet must swallow to supply ṁ. Ref: B.</small></div>
+<div class="eq"><b>12. Matching: how the operating point is found</b><p>Work: η<sub>m</sub>W<sub>t</sub> = W<sub>c</sub> + W<sub>load</sub><br>Flow: MFP<sub>c</sub>(π<sub>c</sub>) from the compressor curve = ṁ√T<sub>t4</sub> / P<sub>t4</sub></p><small>The same air flows through every component (no bleed or fuel). For each trial π<sub>t</sub>, the work equation gives π<sub>c</sub>. The flow equation then holds only at the right π<sub>t</sub>, which the dashboard finds by search. Refs: A, D.</small></div>
+<div class="eq"><b>13. Flow-dependent pressure drop and choke check (optional areas)</b><p>F = ṁ√T<sub>t</sub> / (A P<sub>t</sub>) = √(γ/R) · M / (1 + 0.2M²)<sup>3</sup> &nbsp; (SI units)<br>q = P<sub>t</sub>[1 − (1 + 0.2M²)<sup>−3.5</sup>] &nbsp; ΔP<sub>t</sub> = K · q<br>Choked when F reaches 0.0404 (M = 1, γ = 1.4)</p><small>F is the flow per unit area, found from the section inlet state. Solving F for M gives the section Mach number. The drop is a loss coefficient K times the dynamic pressure q, so it grows roughly with ṁ²T<sub>t</sub>/(P<sub>t</sub>A²). Choke margin = (1 − F/0.0404) × 100. Exit nozzle area needed: A = ṁ√T<sub>t6</sub> / (P<sub>t6</sub> F(M<sub>exit</sub>)). Refs: A, C.</small></div>
+<div class="eq"><b>14. Ram air direct cooling (ACM off)</b><p>ΔT = ε(T<sub>src</sub> − T<sub>t1</sub>), Q = ṁ c<sub>p</sub> ΔT<br>ṁ = A<sub>exit</sub> P<sub>t,exit</sub> F(M<sub>exit</sub>) / √T<sub>t</sub>, with P<sub>t,exit</sub> = P<sub>t1</sub> − ΔP<sub>hx</sub> − ΔP<sub>duct</sub> − ΔP<sub>exit</sub></p><small>With the turbine and compressor bypassed, the ram pressure alone pushes air through the exchanger, so the flow is set by the pressure available and the flow resistance (equation 13). This works when the ram air is colder than the heat source and Q meets the required load. The ACM is only needed when ram air is too warm to cool the load directly. Automatic mode picks ram air alone whenever it meets the load. Ref: B.</small></div>
+<div class="eq"><b>15. Flight envelope</b><p>T = 303.15 − 6.5h (h in km, up to 16 km), then 199.15 + 2.3(h − 16) up to 46 km<br>P = P<sub>b</sub>(T/T<sub>b</sub>)<sup>−g/(RL)</sup> in a layer with temperature gradient L, and P = P<sub>b</sub>exp[−gΔh/(RT)] where T is constant</p><small>Indian Standard Tropical Atmosphere (ISTA7, Ananthasayanam and Narasimha, 1983): 30 °C at sea level, −6.5 K/km to 16 km (−74 °C), then +2.3 K/km to 46 km (−5 °C), constant to 50 km. Sea-level pressure is taken as 101.325 kPa. Pressure follows from the hydrostatic equation in each layer, and the temperature offset is optional. Each envelope cell repeats equations 1–14 at that Mach and altitude. If “Scale with total pressure” is on, the fixed kPa drops are multiplied by P<sub>t0</sub>/P<sub>t0,point</sub>, because at the same corrected flow a drop is proportional to the local total pressure. Sections with area and K already follow the flow. Ref: F.</small></div>
+<div class="eq"><b>16. Heat exchanger pressure drop from a velocity curve</b><p>V = M√(γ R T<sub>s</sub>), ρ = P<sub>s</sub> / (R T<sub>s</sub>)<br>ΔP<sub>hx</sub> = ΔP<sub>curve</sub>(V) · ρ / ρ<sub>ref</sub></p><small>M follows from the flow per unit area (equation 13) at the exchanger inlet, and T<sub>s</sub> and P<sub>s</sub> are the static temperature and pressure there. Pressure drop in a core scales with ρV², so a curve measured at the reference density is scaled by ρ/ρ<sub>ref</sub>. Beyond the ends of your curve the drop is extended as V². Refs: A, B.</small></div>
+<p class="rf"><b>References</b> (general textbook sources; chapter and page numbers differ by edition)<br>A. Saravanamuttoo, Rogers, Cohen, Straznicky, <i>Gas Turbine Theory</i>, Pearson<br>B. Mattingly, <i>Elements of Gas Turbine Propulsion</i>, AIAA<br>C. Anderson, <i>Modern Compressible Flow</i>, McGraw-Hill<br>D. Walsh and Fletcher, <i>Gas Turbine Performance</i>, Blackwell/Wiley<br>E. Çengel and Boles, <i>Thermodynamics: An Engineering Approach</i>, McGraw-Hill<br>F. Ananthasayanam and Narasimha, Proposals for an Indian standard tropical atmosphere up to 50 km, <i>Advances in Space Research</i> 3(1), 1983</p>
+</div></details>
+</main>
+<script>
+const $=i=>document.getElementById(i),g=i=>parseFloat($(i).value);
+const F=[['M','Flight Mach number',1],['Ta','Ambient static T (K)',303.15],['Pa','Ambient static P (kPa)',101.325],['rec','Ram inlet total pressure recovery (%)',98],['dT','Fixed heat added ΔT (K), for the fixed-ΔT model',40],['Tsrc','Heat source temperature (°C)',60],['eps','Heat exchanger effectiveness (%)',80],['Qreq','Required heat load (kW, 0 = no check)',5],['dh','Heat exchanger pressure drop (kPa)',3],['dd','Duct pressure drop (kPa)',1],['dx','Exit duct pressure drop (kPa)',3],['cpt','cp turbine (kJ/kg·K)',1.005],['gt','γ turbine',1.4],['cpc','cp compressor (kJ/kg·K)',1.005],['gc','γ compressor',1.4],['em','Mechanical efficiency (%)',99],['WL','Other shaft load (kW)',0],['dISA','Envelope: temperature offset from the standard atmosphere (K)',0],['envM','Envelope: maximum Mach',2],['envH','Envelope: maximum altitude (km)',20],['Pref','Fixed kPa drops are set for ram total pressure (kPa)',191.8],['kc','Compressor MFP unit factor',1],['kt','Turbine MFP unit factor',1]];
+$('ins').innerHTML=F.map(([k,l,v])=>`<label>${l}<input id="${k}" type="number" step="any" value="${v}" inputmode="decimal"></label>`).join('')+'<label>Supersonic inlet recovery<select id="ss"><option value="1">Reduce above Mach 1 (MIL-E-5007D)</option><option value="0">Fixed % at all Mach</option></select></label><label>Fixed kPa drops across flight conditions<select id="esc"><option value="1">Scale with total pressure</option><option value="0">Fixed kPa</option></select></label><label>Heat exchanger pressure drop model<select id="hxm"><option value="0">Fixed kPa, or K × dynamic pressure (as set below)</option><option value="1">Velocity curve (needs the flow area)</option></select></label><label>Heat exchanger model<select id="hm"><option value="1">Heat source temperature and effectiveness</option><option value="0">Fixed ΔT</option></select></label><label>Operating mode<select id="mode"><option value="0">Automatic: ram air alone when it can cool the load</option><option value="1">ACM always</option><option value="2">Ram air only (ACM off)</option></select></label>';
+const G=[['a_in','Ram inlet throat area (cm²)'],['a_hx','Heat exchanger flow area (cm²)',30],['k_hx','Heat exchanger loss coefficient K',1.14],['a_dc','Duct flow area (cm²)',25],['k_dc','Duct loss coefficient K',0.22],['a_ex','Exit duct flow area (cm²)',20],['k_ex','Exit duct loss coefficient K',0.59],['rho_ref','Reference air density of the velocity curve (kg/m³)',1.225]];
+$('ins2').innerHTML=G.map(([k,l,d])=>`<label>${l}<input id="${k}" type="number" step="any" min="0" placeholder="optional" value="${d===undefined?'':d}" inputmode="decimal"></label>`).join('');
+const C0=Math.sqrt(1.4/287);
+const MP=[['mp_m','Air flow ṁ (kg/s)',s=>s.mt],['mp_t2','Turbine outlet Tt (°C)',s=>s.T2-273.15,1],['mp_p2','Turbine outlet Pt (kPa)',s=>s.P2],['mp_t5','Compressor outlet Tt (°C)',s=>s.T4-273.15,1],['mp_p5','Compressor outlet Pt (kPa)',s=>s.P4],['mp_pt','Turbine π',s=>s.pt],['mp_pc','Compressor π',s=>s.pc],['mp_q','Heat absorbed (kW)',(s,p)=>s.mt*p.cpc*(s.T3-s.T2)]];
+$('ins3').innerHTML=MP.map(([k,l])=>`<label>${l}<input id="${k}" type="number" step="any" placeholder="optional" inputmode="decimal"></label>`).join('');
+let ROOT=0,ENV=null;
+const TBL='style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap"',TH='style="font-weight:400"',TD='style="padding:4px 10px 4px 0;text-align:left"';
+function mpHtml(s,p){
+ const R=MP.map(([k,l,f,t])=>{const x=parseFloat($(k).value);return Number.isFinite(x)?[l,x,f(s,p),t?x+273.15:x]:null}).filter(Boolean);
+ if(!R.length)return '';
+ const rows=R.map(([l,x,m,b])=>{const d=m-x;return `<tr><td ${TD}>${l}</td><td>${fm(x,4)}</td><td>${fm(m,4)}</td><td>${fm(d,3)}</td><td>${fm(b?d/b*100:NaN,3)}</td></tr>`}).join('');
+ const w=R.filter(r=>r[3]).map(([l,x,m,b])=>[l,Math.abs((m-x)/b)*100]).sort((a,b)=>b[1]-a[1])[0];
+ return `<h3 style="font-size:.9rem;margin:12px 0 4px">Model vs measured</h3><div style="overflow-x:auto"><table ${TBL}><tr style="color:var(--mu)"><th style="text-align:left;font-weight:400">Quantity</th><th ${TH}>Measured</th><th ${TH}>Model</th><th ${TH}>Model − measured</th><th ${TH}>Difference (%)</th></tr>${rows}</table></div><p class="mu" style="margin:6px 0 0">${w?`Largest difference: ${w[0]}, ${fm(w[1],3)} %. `:''}Temperature percentages use kelvin. A few percent means the curves, losses and heat load represent the machine well. Larger gaps point to the efficiency or MFP curves, the pressure drops, or a shaft speed different from the one your curves assume.</p>`;
+}
+function solHtml(roots,p,D,fl,cur){
+ SOLROWS=roots.map((x,i)=>{const r=solve(x,p,D,fl),u=r.u,c=r.c,T5=u.T3*c.tc,P5=u.P3*c.pc,P6=P5-lossK(P5,T5,u.mt,p.a_ex,p.k_ex,p.dx).dp;return[i+1,u.pt,c.pc,u.mt,u.T2-273.15,T5-273.15,P6,u.mt*p.cpc*(u.T3-u.T2),P6>p.Pa?1:0]});LAST.solutions=SOLROWS;
+ if(roots.length<2)return '';
+ const rows=roots.map((x,i)=>{const r=solve(x,p,D,fl),u=r.u,c=r.c,T5=u.T3*c.tc,P5=u.P3*c.pc,P6=P5-lossK(P5,T5,u.mt,p.a_ex,p.k_ex,p.dx).dp;
+  return `<tr><td ${TD}>${i+1}${i===cur?' (shown)':''}</td><td>${fm(u.pt,4)}</td><td>${fm(c.pc,4)}</td><td>${fm(u.mt,3)}</td><td>${fm(u.T2-273.15,4)}</td><td>${fm(T5-273.15,4)}</td><td>${fm(P6,4)}</td><td>${fm(u.mt*p.cpc*(u.T3-u.T2),3)}</td><td>${P6>p.Pa?'yes':'no'}</td><td>${i===cur?'':`<button class="bt" data-root="${i}">Show</button>`}</td></tr>`}).join('');
+ return `<h3 style="font-size:.9rem;margin:12px 0 4px">All matching solutions (${roots.length})</h3><div style="overflow-x:auto"><table ${TBL}><tr style="color:var(--mu)"><th style="text-align:left;font-weight:400">#</th><th ${TH}>π turbine</th><th ${TH}>π compressor</th><th ${TH}>ṁ (kg/s)</th><th ${TH}>Turbine out (°C)</th><th ${TH}>Comp. out (°C)</th><th ${TH}>Exit Pt (kPa)</th><th ${TH}>Q (kW)</th><th ${TH}>Can exhaust</th><th></th></tr>${rows}</table></div><p class="mu" style="margin:6px 0 0">Several solutions usually mean a flat (choked) section or a curve that is not monotonic. Which one a real machine settles on depends on the shaft speed, which this model does not track. Press Show to load a solution into the results above.</p>`;
+}
+const parseTab=t=>t.split('\n').map(pl).filter(r=>r.length>=2&&r.slice(0,2).every(Number.isFinite)&&r[0]>0).map(r=>[r[0],r[1]]).sort((a,b)=>a[0]-b[0]);
+$('hxt').value="20, 0.30\n40, 1.20\n60, 2.70\n80, 4.80\n100, 7.50";
+const DB=[['cp','Compressor: π and MFP',"1.14, 6.0e-5\n1.30, 5.5e-5\n1.45, 5.0e-5\n1.58, 4.5e-5\n1.70, 4.35e-5\n1.80, 4.30e-5\n1.90, 4.28e-5",0],['ce','Compressor: temperature ratio τ and MFP',"1.0545, 6.0e-5\n1.0998, 5.5e-5\n1.1366, 5.0e-5\n1.1703, 4.5e-5\n1.2021, 4.35e-5\n1.2266, 4.30e-5\n1.2500, 4.28e-5",1],['tp','Turbine: π and MFP',"1.4, 1.5e-5\n1.7, 1.9e-5\n2.0, 2.3e-5\n2.3, 2.55e-5\n2.7, 2.7e-5\n3.2, 2.75e-5",0],['te','Turbine: temperature ratio τ and MFP',"0.9267, 1.5e-5\n0.8833, 1.9e-5\n0.8473, 2.3e-5\n0.8191, 2.55e-5\n0.7900, 2.7e-5\n0.7611, 2.75e-5",1]];
+const OP=[['π, MFP','MFP, π'],['τ, MFP','MFP, τ']],OV=[['0','1'],['1','0']];
+$('dat').innerHTML=DB.map(([k,l,v,t])=>`<div class="card"><h2>${l}</h2><label>Column order<select id="ds_${k}"><option value="${OV[t][0]}">${OP[t][0]}</option><option value="${OV[t][1]}">${OP[t][1]}</option></select></label><label style="margin-top:6px">Rows<textarea id="dt_${k}" spellcheck="false"></textarea></label><small class="mu" id="dn_${k}"></small></div>`).join('');
+DB.forEach(([k,l,v])=>$('dt_'+k).value=v);
+const pl=l=>{l=l.trim();const d=/[;\t]/.test(l);return (d?l.split(/[;\t]+/).map(x=>x.trim().replace(',','.')):l.split(/[\s,]+/)).filter(x=>x!=='').map(Number)};
+const rd=k=>{const sw=$('ds_'+k).value==='1',rows=$('dt_'+k).value.split('\n').map(pl).filter(r=>r.length>=2&&r.slice(0,2).every(Number.isFinite));
+ const a=rows.map(r=>sw?[r[1],r[0]]:[r[0],r[1]]).sort((x,y)=>x[0]-y[0]);a.extra=rows.filter(r=>r.length>2).length;return a};
+function ip(tb,x,c){const n=tb.length;if(x<=tb[0][0])return{v:tb[0][c],o:x<tb[0][0]-1e-12};if(x>=tb[n-1][0])return{v:tb[n-1][c],o:x>tb[n-1][0]+1e-12};let i=1;while(tb[i][0]<x)i++;const a=tb[i-1],b=tb[i],t=(x-a[0])/((b[0]-a[0])||1);return{v:a[c]+t*(b[c]-a[c]),o:false}}
+const E=v=>v>1.5?v/100:v;
+function mach(Fv){let a=0,b=1;for(let i=0;i<24;i++){const m=(a+b)/2;if(C0*m/Math.pow(1+.2*m*m,3)<Fv)a=m;else b=m}return(a+b)/2}
+const tabDp=(tb,V)=>{const n=tb.length;if(V<=tb[0][0])return tb[0][1]*Math.pow(V/tb[0][0],2);if(V>=tb[n-1][0])return tb[n-1][1]*Math.pow(V/tb[n-1][0],2);let i=1;while(tb[i][0]<V)i++;const a=tb[i-1],b=tb[i];return a[1]+(V-a[0])/((b[0]-a[0])||1)*(b[1]-a[1])};
+function lossK(P,T,m,A,K,fx,tb,rr){
+ if(!(A>0))return{dp:fx,M:NaN,mg:NaN,A:0,ch:false,V:NaN};
+ const Fv=m*Math.sqrt(T)/(A*1e-4*P*1000),Fm=C0/1.728,ch=Fv>=Fm,M=ch?1:mach(Fv),g2=1+.2*M*M,q=P*(1-Math.pow(g2,-3.5)),Ts=T/g2,rho=P/Math.pow(g2,3.5)*1000/(287*Ts),V=M*Math.sqrt(1.4*287*Ts);
+ let dp=K>0?K*q:fx;if(tb&&rho>0)dp=tabDp(tb,V)*rho/(rr||1.225);
+ return{dp,M,mg:(1-Fv/Fm)*100,A,ch,V};
+}
+function tur(pt,p,D,fl){
+ const k1=(p.gt-1)/p.gt,a=ip(D.tp,pt,1),mfp=a.v,mt=mfp/p.kt*fl.P1*1000/Math.sqrt(fl.T1),eo=ip(D.te,mfp,1),tt=eo.v,den=1-Math.pow(pt,-k1),et=den>1e-9?(1-tt)/den:NaN;
+ const T2=fl.T1*tt,P2=fl.P1/pt,T3=T2+dTx(p,T2),h1=lossK(P2,T2,mt,p.a_hx,p.k_hx,p.dh,p.hxtb,p.rho_ref),P3a=P2-h1.dp,h2=lossK(P3a,T3,mt,p.a_dc,p.k_dc,p.dd),P3=P3a-h2.dp;
+ return{pt,mfp,mt,et,tt,T2,P2,T3,P3a,P3,h1,h2,Wt:p.em*mt*p.cpt*(fl.T1-T2),out:a.o||eo.o};
+}
+function cmp(pc,u,p,D){
+ const k2=(p.gc-1)/p.gc,a=ip(D.cp,pc,1),mfp=a.v,co=ip(D.ce,mfp,1),tc=co.v,ec=(Math.pow(pc,k2)-1)/(tc-1);
+ return{pc,mfpc:mfp,ec,tc,Wc:u.mt*p.cpc*u.T3*(tc-1),out:a.o||co.o};
+}
+function solve(pt,p,D,fl){
+ const u=tur(pt,p,D,fl),tg=u.Wt-p.WL,h=x=>cmp(x,u,p,D).Wc-tg;
+ if(!(u.P3>0))return{u,bad:-1};let x0=D.cp[0][0],x1=D.cp[D.cp.length-1][0];
+ if(h(x0)>0)return{u,bad:-1};if(h(x1)<0)return{u,bad:1};
+ for(let k=0;k<32;k++){const xm=(x0+x1)/2;if(h(xm)<0)x0=xm;else x1=xm}
+ const c=cmp((x0+x1)/2,u,p,D),req=p.kc*u.mt*Math.sqrt(u.T3)/(u.P3*1000);
+ return{u,c,bad:0,C:(req-c.mfpc)/c.mfpc};
+}
+function chart(id,S,xl){
+ const W=360,H=215,l=44,r=S.length>1?44:12,t=12,b=36,w=W-l-r,h=H-t-b;
+ const X=S.flatMap(s=>s.p.map(q=>q[0]));let x0=Math.min(...X),x1=Math.max(...X);if(x0===x1)x1=x0+1;
+ const rg=sd=>{const Y=S.filter(s=>s.s===sd).flatMap(s=>s.p.map(q=>q[1]).concat(s.m?[s.m[1]]:[]));if(!Y.length)return null;const a=Math.min(...Y),c=Math.max(...Y),d=(c-a||1)*.1;return[a-d,c+d]};
+ const R=[rg(0),rg(1)],px=x=>l+(x-x0)/(x1-x0)*w,py=(y,s)=>t+h-(y-R[s][0])/(R[s][1]-R[s][0])*h;
+ let o='';
+ for(let i=0;i<=4;i++){const x=x0+(x1-x0)*i/4;o+=`<line class="gr" x1="${px(x)}" x2="${px(x)}" y1="${t}" y2="${t+h}"/><text class="tk" x="${px(x)}" y="${t+h+13}" text-anchor="middle">${x.toPrecision(3)}</text>`}
+ [0,1].forEach(sd=>{if(!R[sd])return;for(let i=0;i<=4;i++){const y=R[sd][0]+(R[sd][1]-R[sd][0])*i/4,yy=py(y,sd);o+=`<text class="tk" x="${sd?l+w+4:l-4}" y="${yy+3}" text-anchor="${sd?'start':'end'}">${Math.abs(y)>=1000?y.toFixed(0):y.toPrecision(3)}</text>`;if(!sd)o+=`<line class="gr" x1="${l}" x2="${l+w}" y1="${yy}" y2="${yy}"/>`}});
+ if(S[0].z&&R[0][0]<0&&R[0][1]>0)o+=`<line class="zl" x1="${l}" x2="${l+w}" y1="${py(0,0)}" y2="${py(0,0)}"/>`;
+ S.forEach(s=>{const d=s.p.map((q,i)=>(i?'L':'M')+px(q[0]).toFixed(1)+' '+py(q[1],s.s).toFixed(1)).join('');
+  o+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2"${s.dash?' stroke-dasharray="5 3"':''}/>`;
+  if(s.d)s.p.forEach(q=>o+=`<circle cx="${px(q[0])}" cy="${py(q[1],s.s)}" r="2.6" fill="${s.c}"/>`);
+  if(s.m){const x=px(s.m[0]),y=py(s.m[1],s.s);o+=`<line class="zl" x1="${x}" x2="${x}" y1="${y}" y2="${t+h}"/><circle cx="${x}" cy="${y}" r="5" fill="${s.c}" stroke="var(--cd)" stroke-width="2"/>`}});
+ o+=`<text class="tk" x="${l+w/2}" y="${H-4}" text-anchor="middle">${xl}</text>`;
+ $(id).innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${xl} chart">${o}</svg>`;
+}
+const fm=(n,d=4)=>Number.isFinite(n)?(+n.toPrecision(d)).toString():'–';
+const K=(l,v,u)=>`<div class="k"><small>${l}</small><b>${v}</b>${u?`<u>${u}</u>`:''}</div>`;
+function sysSvg(v){
+ const dot=(n,x,y)=>`<circle class="dt" cx="${x}" cy="${y}" r="8"/><text class="dn" x="${x}" y="${y+3.5}" text-anchor="middle">${n}</text>`;
+ const st=(i,x,y,a)=>`<text class="sm" x="${x}" y="${y}" text-anchor="${a}">Tt ${fm(v.T[i],4)} K</text><text class="sm" x="${x}" y="${y+11}" text-anchor="${a}">Pt ${fm(v.P[i],4)} kPa</text>`;
+ return `<svg viewBox="0 0 446 292" role="img" aria-label="System layout: ram inlet, turbine and compressor in a row, heat exchanger above the turbine"><defs>
+ <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="mk" d="M0 0L8 4L0 8z"/></marker>
+ <marker id="arh" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="mh" d="M0 0L8 4L0 8z"/></marker></defs>
+ <g transform="translate(34,0)">
+ <line class="fl" x1="-20" y1="190" x2="12" y2="190" marker-end="url(#ar)"/><polygon class="bx" points="16,178 70,166 70,214 16,202"/>
+ <line class="fl" x1="70" y1="190" x2="100" y2="190"/><polygon class="tu" points="100,172 160,156 160,224 100,208"/>
+ <line class="fl" x1="130" y1="164" x2="130" y2="120" marker-end="url(#ar)"/>
+ <rect class="bx" x="80" y="60" width="100" height="56" rx="4"/><polyline class="zz" points="92,88 104,70 116,106 128,70 140,106 152,70 168,88"/>
+ <line class="hl" x1="130" y1="8" x2="130" y2="56" marker-end="url(#arh)"/>
+ <path class="fl" d="M180 88H250V160" marker-end="url(#ar)"/>
+ <line class="sh" x1="160" y1="190" x2="230" y2="190"/><polygon class="cm" points="230,156 290,172 290,208 230,224"/>
+ <line class="fl" x1="290" y1="190" x2="322" y2="190"/><polygon class="bx" points="322,178 364,184 364,196 322,202"/>
+ <line class="fl" x1="372" y1="190" x2="400" y2="190" marker-end="url(#ar)"/>
+ ${dot(0,-8,190)}${dot(1,85,190)}${dot(2,130,140)}${dot(3,205,88)}${dot(4,250,134)}${dot(5,306,190)}${dot(6,364,190)}
+ ${st(0,-8,222,'middle')}${st(1,85,236,'middle')}${st(2,144,135,'start')}${st(3,215,62,'middle')}${st(4,262,131,'start')}${st(5,306,236,'middle')}${st(6,364,236,'middle')}
+ <text class="sv" x="-14" y="24">ṁ = ${fm(v.mt,3)} kg/s</text>
+ <text class="lb" x="43" y="142" text-anchor="middle">Ram inlet</text><text class="sm" x="43" y="154" text-anchor="middle">M ${fm(v.M,3)}</text>
+ <text class="sm" x="138" y="30">Q ${fm(v.Q,3)} kW</text>
+ <text class="lb" x="74" y="84" text-anchor="end">Heat</text><text class="lb" x="74" y="96" text-anchor="end">exchanger</text><text class="sm" x="74" y="108" text-anchor="end">+${fm(v.dT,3)} K</text>
+ <text class="lb" x="258" y="106">Duct</text>
+ <text class="sm" x="195" y="182" text-anchor="middle">Shaft</text><text class="sm" x="195" y="206" text-anchor="middle">${fm(v.W,3)} kW</text>
+ <text class="lb" x="130" y="264" text-anchor="middle">Turbine</text><text class="sm" x="130" y="276" text-anchor="middle">π ${fm(v.pt,3)}</text>
+ <text class="lb" x="260" y="264" text-anchor="middle">Compressor</text><text class="sm" x="260" y="276" text-anchor="middle">π ${fm(v.pc,3)}</text>
+ <text class="lb" x="343" y="264" text-anchor="middle">Exit</text><text class="sm" x="343" y="276" text-anchor="middle">M ${fm(v.Me,2)}</text>
+ </g></svg>`}
+function search(p,D,fl,N0){
+ const a=D.tp[0][0],b=D.tp[D.tp.length-1][0],N=N0,sc=[],roots=[];
+ for(let i=0;i<=N;i++){const x=a+(b-a)*i/N;sc.push({x,r:solve(x,p,D,fl)})}
+ const ok=sc.filter(o=>!o.r.bad);
+ for(let i=0;i<N;i++){const A=sc[i],B=sc[i+1];if(A.r.bad||B.r.bad)continue;
+  if(A.r.C===0)roots.push(A.x);else if(A.r.C*B.r.C<0){let x0=A.x,x1=B.x,c0=A.r.C;for(let k=0;k<25;k++){const xm=(x0+x1)/2,r=solve(xm,p,D,fl);if(r.bad)break;if(r.C*c0<=0)x1=xm;else{x0=xm;c0=r.C}}roots.push((x0+x1)/2)}}
+ const sol=roots.length?solve(roots[0],p,D,fl):null;
+ return{sc,ok,roots,sol}}
+const dTx=(p,T)=>p.hm?p.eps*(p.Tsrc-T):p.dT;
+const recov=(p,M)=>p.rec/100*(p.ss&&M>1?1-.075*Math.pow(M-1,1.35):1);
+const ATM={T0:303.15,L:[[0,-6.5],[16,2.3],[46,0]]};
+const ISA=(h,dT)=>{const A=ATM,R=287.053,g0=9.80665;let T=A.T0,P=101.325;
+ for(let k=0;k<A.L.length;k++){const[h0,L]=A.L[k],h1=k+1<A.L.length?A.L[k+1][0]:1e9,hh=Math.min(h,h1);
+  if(hh>h0){const dz=hh-h0;if(L===0)P*=Math.exp(-g0*dz*1000/(R*T));else{const Tn=T+L*dz;P*=Math.pow(Tn/T,-g0/(R*L/1000));T=Tn}}
+  if(h<=h1)break}
+ return{T:T+dT,P}};
+const palt=P=>{let a=0,b=60;for(let i=0;i<40;i++){const m=(a+b)/2;if(ISA(m,0).P>P)a=m;else b=m}return(a+b)/2};
+function byp(p,f){
+ if(!(p.a_ex>0)||!(f.P1>f.Pa))return null;
+ const dT=dTx(p,f.T1),To=f.T1+dT,st=m=>{const h1=lossK(f.P1,f.T1,m,p.a_hx,p.k_hx,p.dh,p.hxtb,p.rho_ref),P2=f.P1-h1.dp,h2=lossK(P2,To,m,p.a_dc,p.k_dc,p.dd),P3=P2-h2.dp,h3=lossK(P3,To,m,p.a_ex,p.k_ex,p.dx);return{P2,P3,P4:P3-h3.dp}};
+ const mx=P=>{const pr=P/f.Pa;return pr>=1.8929?1:Math.sqrt(5*(Math.pow(pr,1/3.5)-1))};
+ const cap=m=>{const P=st(m).P4;if(!(P>f.Pa))return 0;const Me=mx(P);return p.a_ex*1e-4*P*1000*C0*Me/Math.pow(1+.2*Me*Me,3)/Math.sqrt(To)};
+ let a=0,b=1.5*p.a_ex*1e-4*f.P1*1000*(C0/1.728)/Math.sqrt(Math.min(f.T1,To));
+ for(let i=0;i<30;i++){const m=(a+b)/2;if(m>cap(m))b=m;else a=m}
+ const m=(a+b)/2,q=st(m),Q=m*p.cpc*dT;
+ return{m,dT,To,Q,P2:q.P2,P3:q.P3,P4:q.P4,Me:q.P4>f.Pa?mx(q.P4):0,ok:dT>0&&m>0&&(p.Qreq>0?Q>=p.Qreq:true)};
+}
+function byHtml(by,p,fl){
+ if(!by)return '<div class="status wn">Ram air alone cannot flow here: the exit duct flow area is missing, or the ram total pressure does not exceed ambient.</div>';
+ const row=(n,a,b,c,d)=>`<tr><td style="padding:4px 10px 4px 0;text-align:left">${n}</td><td>${fm(a,5)}</td><td>${fm(b,5)}</td><td>${fm(c,5)}</td><td>${fm(d,5)}</td></tr>`,th='style="font-weight:400"';
+ const msg=by.ok?`ACM off: ram air at ${fm(fl.T1-273.15,4)} °C is cooler than the heat source (${fm(p.Tsrc-273.15,4)} °C), so it cools the exchanger directly and absorbs ${fm(by.Q,3)} kW.`:`Ram air alone is not enough: it would absorb ${fm(by.Q,3)} kW${p.Qreq>0?` against the ${fm(p.Qreq,3)} kW required`:''}${by.dT<=0?', and it is warmer than the heat source':''}.`;
+ return `<div class="status ${by.ok?'ok':'wn'}">${msg}</div><div class="grp"><h3>Ram air only (turbine and compressor bypassed)</h3>${K('Air flow ṁ',fm(by.m,3),'kg/s')}${K('Air temperature rise',fm(by.dT,3),'K')}${K('Heat absorbed',fm(by.Q,4),'kW')}${K('Exit Mach',fm(by.Me,3))}</div>
+ <h3 style="font-size:.9rem;margin:10px 0 4px">Total temperature and total pressure at each object</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap"><tr style="color:var(--mu)"><th style="text-align:left;font-weight:400">Object</th><th ${th}>Tt in (K)</th><th ${th}>Tt out (K)</th><th ${th}>Pt in (kPa)</th><th ${th}>Pt out (kPa)</th></tr>${row('Ram inlet',fl.T0,fl.T1,fl.P0,fl.P1)}${row('Heat exchanger',fl.T1,by.To,fl.P1,by.P2)}${row('Duct',by.To,by.To,by.P2,by.P3)}${row('Exit duct',by.To,by.To,by.P3,by.P4)}</table></div>`;
+}
+function cell(M,al,p,D){
+ const R=(k,w,v)=>{cell.why=w;cell.v=v||null;return k};
+ const a=ISA(al,p.dISA),q=1+.2*M*M,f={T0:a.T*q,P0:a.P*Math.pow(q,3.5),Pa:a.P};f.T1=f.T0;f.P1=f.P0*recov(p,M);
+ const sf=p.esc?f.P0/p.Pref:1,pp=Object.assign({},p,{dh:p.dh0*sf,dd:p.dd0*sf,dx:p.dx0*sf});
+ const by=p.mode!=='1'?byp(pp,f):null,bv=by?{Q:by.Q,m:by.m,T:f.T1,g:'r'}:null;
+ const bs=by?`Ram air alone would pass ${fm(by.m,3)} kg/s and absorb ${fm(by.Q,3)} kW${by.dT<=0?', but it is warmer than the heat source':p.Qreq>0?`, against ${fm(p.Qreq,3)} kW required`:''}.`:'Ram air alone cannot flow here (ram pressure not above ambient, or exit area missing).';
+ if(p.mode==='2')return by?(by.ok?R(6,'Ram air meets the load and the ACM is bypassed.',bv):R(7,bs,bv)):R(2,bs);
+ if(by&&by.ok)return R(6,`Ram air at ${fm(f.T1-273.15,3)} °C passes ${fm(by.m,3)} kg/s and absorbs ${fm(by.Q,3)} kW, enough for the load, so the ACM is off.`,bv);
+ const bw=p.mode==='0'?bs+' ':'',r=search(pp,D,f,30);
+ if(!r.sol){if(r.ok.length)return R(5,bw+'The work balances, but no turbine pressure ratio gives equal flows in turbine and compressor.');
+  return r.sc.filter(o=>o.r.bad>0).length*2>=r.sc.length?R(4,bw+'The turbine makes more power than the compressor can absorb, even at its highest pressure ratio.'):R(3,bw+'The turbine cannot drive the compressor, even at the compressor lowest pressure ratio.')}
+ const u=r.sol.u,c=r.sol.c,T5=u.T3*c.tc,P5=u.P3*c.pc,hx=lossK(P5,T5,u.mt,p.a_ex,p.k_ex,pp.dx),P6=P5-hx.dp,dTa=u.T3-u.T2,Qc=u.mt*p.cpc*dTa,v={Q:Qc,m:u.mt,T:u.T2,g:'a'};
+ if(!(P6>a.P))return R(2,bw+`The compressor exit total pressure ${fm(P6,4)} kPa is below ambient ${fm(a.P,4)} kPa, so the air cannot leave.`);
+ if(!(dTa>0))return R(7,bw+`The turbine outlet at ${fm(u.T2-273.15,3)} °C is warmer than the heat source at ${fm(p.Tsrc-273.15,3)} °C.`,v);
+ if(p.Qreq>0&&Qc<p.Qreq)return R(7,bw+`ACM capacity ${fm(Qc,3)} kW is below the required ${fm(p.Qreq,3)} kW.`,v);
+ const ch=u.h1.ch||u.h2.ch||hx.ch||(p.a_in>0&&lossK(f.P1,f.T1,u.mt,p.a_in,0,0).ch);
+ return R(ch?1:0,bw+`The ACM runs with ${fm(u.mt,3)} kg/s and absorbs ${fm(Qc,3)} kW${ch?', but a section is choked':''}.`,v);
+}
+const EN=['ACM operates and meets the load','Operates, a section is choked','Work and flow match, but the air cannot leave','Turbine cannot drive the compressor','Turbine power surplus (add load or heat)','Work balances, flows do not match','Ram air cools the load directly (ACM off)','Cooling falls short: air too warm or capacity below the load'];
+let ENVJOB=0;
+const EG={W:360,H:262,l:42,r:10,t:8,b:36};
+const sameC=(a,b)=>a.k===b.k&&((a.v&&a.v.g)||'')===((b.v&&b.v.g)||'');
+function envRow(j,E){
+ const{nx,ny,p,D}=E,al=(j+.5)/ny*p.envH,row=new Array(nx);
+ const ev=i=>{if(!row[i]){const k=cell((i+.5)/nx*p.envM,al,p,D);row[i]={k,v:cell.v,c:1}}return row[i]};
+ const fill=(a,b)=>{const A=row[a],B=row[b];for(let i=a+1;i<b;i++){const t=(i-a)/(b-a);row[i]={k:A.k,c:0,v:A.v&&B.v&&A.v.g===B.v.g?{Q:A.v.Q+(B.v.Q-A.v.Q)*t,m:A.v.m+(B.v.m-A.v.m)*t,T:A.v.T+(B.v.T-A.v.T)*t,g:A.v.g}:A.v}}};
+ const seg=(a,b)=>{ev(a);ev(b);if(b-a<2)return;if(sameC(row[a],row[b]))return fill(a,b);let lo=a,hi=b;while(hi-lo>1){const m=(lo+hi)>>1;ev(m);if(sameC(row[m],row[a]))lo=m;else hi=m}seg(a,lo);seg(hi,b)};
+ const idx=[];for(let i=0;i<nx;i+=5)idx.push(i);if(idx[idx.length-1]!==nx-1)idx.push(nx-1);
+ for(let q=0;q+1<idx.length;q++)seg(idx[q],idx[q+1]);
+ return row;
+}
+function envStart(p,D){
+ if(!(p.envM>0&&p.envH>0)){ENV=null;$('env').innerHTML='<p class="mu">Set a positive maximum Mach and altitude.</p>';return}
+ const key=JSON.stringify([p,D],(k,v)=>['M','Ta','Pa','dh','dd','dx'].includes(k)?undefined:v);
+ if(ENV&&ENV.key===key&&ENV.pos>=ENV.order.length){ENV.p=p;$('env').innerHTML=envDraw();return}
+ const nx=160,ny=120,job=++ENVJOB,order=[];
+ [[8,4],[4,2],[2,1],[2,0]].forEach(([m,r])=>{for(let j=0;j<ny;j++)if(j%m===r)order.push(j)});
+ ENV={nx,ny,p,D,key,job,order,nc:ny/8,pos:0,last:0,rows:new Array(ny).fill(null)};
+ $('env').innerHTML='<p class="mu">Computing the envelope…</p>';
+ setTimeout(()=>envStep(job),0);
+}
+function envStep(job){
+ const E=ENV;if(!E||E.job!==job)return;
+ const t0=performance.now(),n=E.order.length;
+ while(E.pos<n&&performance.now()-t0<40){const j=E.order[E.pos++];E.rows[j]=envRow(j,E)}
+ if(E.pos>=E.nc&&(E.pos>=n||!E.last||E.pos-E.last>n*.15)){E.last=E.pos;$('env').innerHTML=envDraw()}
+ if(E.pos<n)setTimeout(()=>envStep(job),0);
+}
+function envDraw(){
+ const E=ENV,{nx,ny,p,rows}=E,{W,H,l,r,t,b}=EG,w=W-l-r,h=H-t-b,cw=w/nx,ch=h/ny,ov=$('ov').value,done=E.pos>=E.order.length;
+ const near=j=>{for(let d=0;d<9;d++){if(rows[j-d])return rows[j-d];if(rows[j+d])return rows[j+d]}return rows[j]},X=i=>l+(i+.5)*cw,Y=j=>t+h-(j+.5)*ch,cnt=Array(8).fill(0);let o='';
+ for(let j=0;j<ny;j++){const R=near(j);let i=0;while(i<nx){const k=R[i].k;let n=1;while(i+n<nx&&R[i+n].k===k)n++;cnt[k]+=n;
+  o+=`<rect class="e${k}" x="${(l+i*cw).toFixed(1)}" y="${(t+h-(j+1)*ch).toFixed(1)}" width="${(n*cw+.3).toFixed(1)}" height="${(ch+.3).toFixed(1)}"/>`;i+=n}}
+ const pick={1:v=>v.Q,2:v=>v.m,3:v=>v.T-273.15}[ov];let cap='';
+ if(!done)cap=`<div style="color:var(--mu)">Refining: ${Math.round(E.pos/E.order.length*100)} % of the rows computed. Contour lines appear when it finishes.</div>`;
+ else if(pick){const V=Array.from({length:ny},()=>Array(nx).fill(NaN)),Gm=V.map(r=>r.map(()=>''));rows.forEach((R,j)=>R.forEach((e,i)=>{if(e.v&&[0,1,6,7].includes(e.k)){V[j][i]=pick(e.v);Gm[j][i]=e.v.g}}));
+  const fin=V.flat().filter(Number.isFinite);
+  if(fin.length&&Math.max(...fin)>Math.min(...fin)){const lo=Math.min(...fin),hi=Math.max(...fin),raw=(hi-lo)/7,mag=Math.pow(10,Math.floor(Math.log10(raw))),st=[1,2,5,10].map(m=>m*mag).find(x=>x>=raw);
+   for(let L=Math.ceil(lo/st)*st;L<hi;L+=st){let lab=0;
+    for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){const q=[V[j][i],V[j][i+1],V[j+1][i+1],V[j+1][i]];if(q.some(x=>!Number.isFinite(x))||new Set([Gm[j][i],Gm[j][i+1],Gm[j+1][i+1],Gm[j+1][i]]).size>1)continue;
+     const P=[[i,j],[i+1,j],[i+1,j+1],[i,j+1]],pts=[];
+     for(let e=0;e<4;e++){const a=q[e],bb=q[(e+1)%4];if((a<L)!==(bb<L)){const u=(L-a)/(bb-a),A=P[e],B=P[(e+1)%4];pts.push([X(A[0]+(B[0]-A[0])*u),Y(A[1]+(B[1]-A[1])*u)])}}
+     for(let k=0;k+1<pts.length;k+=2){const[A,B]=[pts[k],pts[k+1]];o+=`<line class="ct" x1="${A[0].toFixed(1)}" y1="${A[1].toFixed(1)}" x2="${B[0].toFixed(1)}" y2="${B[1].toFixed(1)}"/>`;
+      if(!lab&&(i+j)%13===0){lab=1;o+=`<text class="cl" x="${((A[0]+B[0])/2).toFixed(1)}" y="${((A[1]+B[1])/2).toFixed(1)}" text-anchor="middle">${+L.toPrecision(3)}</text>`}}}}
+   cap=`<div style="color:var(--mu)">Black lines: ${['','heat absorbed (kW)','air flow (kg/s)','heat exchanger inlet temperature (°C)'][ov]}, drawn where the system operates (green, yellow, teal or magenta cells). Lines stop where the mode changes between ram air and the ACM, because the quantity jumps there.</div>`}}
+ for(let i=0;i<=4;i++){const x=l+w*i/4,y=t+h-h*i/4;o+=`<text class="tk" x="${x}" y="${t+h+13}" text-anchor="middle">${(p.envM*i/4).toFixed(2)}</text><text class="tk" x="${l-4}" y="${y+3}" text-anchor="end">${(p.envH*i/4).toFixed(1)}</text>`}
+ o+=`<text class="tk" x="${l+w/2}" y="${H-4}" text-anchor="middle">Flight Mach number</text><text class="tk" transform="translate(9 ${t+h/2}) rotate(-90)" text-anchor="middle">Pressure altitude (km)</text>`;
+ const h0=palt(p.Pa);if(p.M<=p.envM&&h0<=p.envH)o+=`<circle cx="${l+w*p.M/p.envM}" cy="${t+h-h*h0/p.envH}" r="5" fill="var(--cd)" stroke="var(--tx)" stroke-width="2" pointer-events="none"/>`;
+ const tot=nx*ny;
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Flight envelope: Mach number against altitude, coloured by operating region">${o}</svg><div style="display:flex;flex-direction:column;gap:4px;margin-top:8px;font-size:.82rem">${EN.map((n,k)=>cnt[k]?`<div style="display:flex;gap:8px;align-items:center"><span class="e${k}" style="width:14px;height:14px;border-radius:3px;display:inline-block;flex:none;background:currentColor"></span><span>${n} <span style="color:var(--mu)">(${fm(cnt[k]/tot*100,3)} % of the grid)</span></span></div>`:'').join('')}${cap}<div style="color:var(--mu)">Circle: the point calculated above. The grid is ${nx} × ${ny} cells; cells inside uniform regions are interpolated and the boundaries are located cell by cell.</div></div>`;
+}
+function cellAt(e){
+ const sv=$('env').querySelector&&$('env').querySelector('svg');if(!sv||!ENV)return null;
+ const{W,H,l,r,t,b}=EG,w=W-l-r,h=H-t-b,rc=sv.getBoundingClientRect(),fx=((e.clientX-rc.left)/rc.width*W-l)/w,fy=(t+h-(e.clientY-rc.top)/rc.height*H)/h;
+ if(fx<0||fx>=1||fy<0||fy>=1)return null;
+ const M=(Math.floor(fx*ENV.nx)+.5)/ENV.nx*ENV.p.envM,al=(Math.floor(fy*ENV.ny)+.5)/ENV.ny*ENV.p.envH,k=cell(M,al,ENV.p,ENV.D);return{M,al,k,why:cell.why};
+}
+function loadMap(inp,pk,tk,name){
+ const f=inp.files&&inp.files[0];if(!f)return;const fr=new FileReader();
+ fr.onload=()=>{
+  const lines=String(fr.result).replace(/^\uFEFF/,'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean),msg=$('fmsg');
+  let ix={m:0,p:1,t:2};const first=lines[0].split(/[,;\t]+/).map(x=>x.trim());
+  if(first.some(x=>x!==''&&!Number.isFinite(+x.replace(',','.')))){const f1=re=>first.findIndex(x=>re.test(x));
+   const m=f1(/mfp|flow/i),pp=f1(/^pi|π|press|\bpr\b/i),tt=f1(/tau|τ|temp|\btr\b/i);if(m>=0&&pp>=0&&tt>=0)ix={m,p:pp,t:tt};lines.shift()}
+  const rows=lines.map(pl).filter(r=>[ix.m,ix.p,ix.t].every(i=>Number.isFinite(r[i])));
+  inp.value='';
+  if(rows.length<2){msg.textContent=name+': could not read at least two rows with MFP, pressure ratio and temperature ratio.';return}
+  $('dt_'+pk).value=rows.map(r=>r[ix.p]+', '+r[ix.m]).join('\n');$('dt_'+tk).value=rows.map(r=>r[ix.t]+', '+r[ix.m]).join('\n');
+  $('ds_'+pk).value='0';$('ds_'+tk).value='1';msg.textContent=name+': loaded '+rows.length+' rows.';ROOT=0;run();
+ };
+ fr.readAsText(f);
+}
+let LAST={summary:[],stations:[],solutions:[]},SOLROWS=[],DL=null;
+(async()=>{try{if(typeof window!=='undefined'&&window.claude&&window.claude.use){DL=await window.claude.use('downloads');if(DL)$('exp').style.display=''}}catch(e){DL=null}})();
+const csv=(head,rows)=>'\uFEFF'+[head].concat(rows).map(r=>r.map(x=>{const t=typeof x==='number'?(Number.isFinite(x)?String(+x.toPrecision(8)):''):String(x==null?'':x);return /[",\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t}).join(',')).join('\r\n');
+async function exportCsv(kind){
+ const msg=$('exmsg');let name,head,rows;
+ if(kind==='summary'){name='acm_point_summary.csv';head=['group','quantity','value','unit'];rows=LAST.summary}
+ else if(kind==='stations'){name='acm_point_stations.csv';head=['object','Tt_in_K','Tt_out_K','Pt_in_kPa','Pt_out_kPa'];rows=LAST.stations}
+ else if(kind==='solutions'){name='acm_matching_solutions.csv';head=['solution','pi_turbine','pi_compressor','mdot_kg_s','turbine_out_Tt_C','compressor_out_Tt_C','exit_Pt_kPa','heat_absorbed_kW','air_can_exhaust'];rows=SOLROWS}
+ else{name='acm_flight_envelope.csv';head=['mach','altitude_km','region_code','region','heat_absorbed_kW','air_flow_kg_s','hx_inlet_Tt_C','mode','computed_cell'];rows=[];
+  if(ENV&&ENV.pos>=ENV.order.length)ENV.rows.forEach((R,j)=>R.forEach((e,i)=>rows.push([(i+.5)/ENV.nx*ENV.p.envM,(j+.5)/ENV.ny*ENV.p.envH,e.k,EN[e.k],e.v?e.v.Q:'',e.v?e.v.m:'',e.v?e.v.T-273.15:'',e.v?(e.v.g==='r'?'ram air':'ACM'):'',e.c])))}
+ if(!rows.length){msg.textContent='Nothing to export yet. Press Calculate first'+(kind==='envelope'?' and wait for the envelope to finish.':'.');return}
+ if(!DL){msg.textContent='Saving files is not available in this view.';return}
+ try{await DL.save({filename:name,data:csv(head,rows)});msg.textContent='Saved '+name+'.'}
+ catch(e){msg.textContent=e&&e.code==='declined'?'Save cancelled.':'Could not save '+name+(e&&e.message?': '+e.message:'.')}
+}
+function pickCell(c){const a=ISA(c.al,g('dISA')||0);$('M').value=c.M.toFixed(3);$('Ta').value=a.T.toFixed(2);$('Pa').value=a.P.toFixed(3);ROOT=0;run();$('why').innerHTML=`<b>Mach ${c.M.toFixed(2)}, ${c.al.toFixed(1)} km is now loaded above.</b> ${EN[c.k]}. ${c.why}`}
+function calc(){
+ LAST={summary:[],stations:[],solutions:[]};
+ const p={};F.forEach(([k])=>p[k]=g(k));p.em/=100;G.forEach(([k])=>p[k]=parseFloat($(k).value)||0);p.ss=$('ss').value!=='0';p.hm=$('hm').value!=='0';p.mode=$('mode').value;p.eps/=100;p.Tsrc+=273.15;p.hxm=$('hxm').value==='1';p.hxtb=p.hxm?parseTab($('hxt').value):null;p.esc=$('esc').value!=='0';
+ const D={cp:rd('cp'),ce:rd('ce'),tp:rd('tp'),te:rd('te')};
+ DB.forEach(([k])=>{const t=D[k];$('dn_'+k).textContent=t.length+' rows read'+(t.length?', first column from '+fm(t[0][0],3)+' to '+fm(t[t.length-1][0],3):'')+(t.extra?'. '+t.extra+' row(s) have more than two numbers: only the first two are used, so check separators and decimal commas.':'')});
+ const bad=F.filter(([k])=>!Number.isFinite(p[k])).map(f=>f[1]),short=DB.filter(([k])=>D[k].length<2).map(d=>d[1]).concat(p.hxm&&(!p.hxtb||p.hxtb.length<2||!(p.a_hx>0))?['Heat exchanger velocity curve (two or more rows and a heat exchanger flow area)']:[]);
+ if(bad.length||short.length){$('res').innerHTML=`<div class="status wn">${bad.length?'Missing or invalid input: '+bad.join(', ')+'. ':''}${short.length?'Fewer than two readable rows in: '+short.join('; ')+'. Each row needs two numbers separated by a comma, space, tab or semicolon.':''}</div>`;['c1','c2','c3'].forEach(i=>$(i).innerHTML='');return}
+ const q=1+.2*p.M*p.M,fl={T0:p.Ta*q,P0:p.Pa*Math.pow(q,3.5)};fl.T1=fl.T0;fl.P1=fl.P0*recov(p,p.M);
+ if(!(fl.P1>0)){$('res').innerHTML='<div class="status wn">The ram inlet recovery must be above 0 %.</div>';return}
+ p.dh0=p.dh;p.dd0=p.dd;p.dx0=p.dx;if(p.esc){const sf=fl.P0/p.Pref;p.dh*=sf;p.dd*=sf;p.dx*=sf}
+ const{sc,ok,roots}=search(p,D,fl,200),sol=roots.length?solve(roots[Math.min(ROOT,roots.length-1)],p,D,fl):null;let h='',s=null;
+ const by=p.mode!=='1'?byp(p,Object.assign({Pa:p.Pa},fl)):null,useBy=p.mode==='2'||(p.mode==='0'&&by&&by.ok);
+ if(!sol){
+  if(!ok.length){const nb=sc.filter(o=>o.r.bad>0).length,nl=sc.length-nb;h=`<div class="status wn">${nb>=nl?'Turbine work exceeds what the compressor can absorb even at its highest π. Add shaft load or heat, or lower the ram pressure.':'The turbine cannot drive the compressor even at the compressor’s lowest π. Raise the flight Mach number, add less heat, or cut the losses.'}</div>`}
+  else{const tf=ok.map(o=>o.r.u.mt),cf=ok.map(o=>o.r.c.mfpc/p.kc*o.r.u.P3*1000/Math.sqrt(o.r.u.T3)),Cs=ok.map(o=>o.r.C*100),mn=Math.min(...Cs),mx=Math.max(...Cs);h=`<div class="status wn">Work balances, but the flows never match: the turbine passes ${mn>0?'more air than':mx<0?'less air than':'a different amount of air than'} the compressor takes at the π the work balance needs (mismatch ${fm(mn,3)} to ${fm(mx,3)} %). Turbine flow ${fm(Math.min(...tf))} to ${fm(Math.max(...tf))} kg/s; compressor capacity ${fm(Math.min(...cf))} to ${fm(Math.max(...cf))} kg/s. Check the MFP unit factors and that both curves use the same MFP definition.</div>`}}
+ else{const u=sol.u,c=sol.c;
+  s={pt:u.pt,mfpt:u.mfp,tt:u.tt,et:u.et,Wt:u.Wt,mt:u.mt,T2:u.T2,P2:u.P2,T3:u.T3,P3:u.P3,P3a:u.P3a,pc:c.pc,mfpc:c.mfpc,tc:c.tc,ec:c.ec,Wc:c.Wc,T4:u.T3*c.tc,P4:u.P3*c.pc,out:u.out||c.out};const hx=lossK(s.P4,s.T4,s.mt,p.a_ex,p.k_ex,p.dx);s.P5=s.P4-hx.dp;
+  const w=[],pr=s.P5/p.Pa,okp=pr>1;
+  if(roots.length>1)w.push(`${roots.length} matching points found; showing solution ${Math.min(ROOT,roots.length-1)+1}. All of them are listed below.`);
+  if(s.out)w.push('Some MFP falls outside an efficiency curve, so η is held at the end point.');
+  if(s.pt<1||s.pc<1||s.pt>15||s.pc>15)w.push('A pressure ratio is outside 1–15. Check the column order selectors.');
+  const dTa=s.T3-s.T2,Q=s.mt*p.cpc*dTa,ch=pr>=1.8929,Me=okp?(ch?1:Math.sqrt(5*(Math.pow(pr,1/3.5)-1))):NaN;
+  if(!(dTa>0))w.push('Air leaving the turbine is warmer than the heat source, so the exchanger would heat the load instead of cooling it.');else if(p.Qreq>0&&Q<p.Qreq)w.push(`Cooling capacity ${fm(Q,3)} kW is below the required ${fm(p.Qreq,3)} kW.`);
+  const MPH=mpHtml(s,p),SOLH=solHtml(roots,p,D,fl,Math.min(ROOT,roots.length-1));
+  const hr=lossK(fl.P1,fl.T1,s.mt,p.a_in,0,0);hr.dp=fl.P0-fl.P1;
+  const CR=[['Ram inlet throat',hr],['Heat exchanger',u.h1],['Duct',u.h2],['Exit duct',hx]].filter(r=>r[1].A>0);
+  CR.forEach(([n,o])=>{if(o.ch)w.push(`${n} is choked: ${fm(o.A,3)} cm² cannot pass ${fm(s.mt,3)} kg/s here.`)});
+  const Fe=okp?C0*Me/Math.pow(1+.2*Me*Me,3):NaN,Areq=okp?s.mt*Math.sqrt(s.T4)/(s.P5*1000*Fe)*1e4:NaN,nt=[];
+  [['turbine',D.tp,s.pt],['compressor',D.cp,s.pc]].forEach(([n,t,x])=>{const f=y=>ip(t,y,1).v;if(Math.abs((f(x*1.02)-f(x*.98))/f(x))<.005)nt.push(`The ${n} curve is flat at this point (choked section): its flow barely changes with π.`)});
+  const th='style="font-weight:400"',tr=(...c)=>`<tr><td style="padding:4px 10px 4px 0;text-align:left">${c[0]}</td>${c.slice(1).map(x=>`<td>${x}</td>`).join('')}</tr>`;
+  const FC=`<h3 style="font-size:.9rem;margin:12px 0 4px">Flow checks</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap"><tr style="color:var(--mu)"><th style="text-align:left;font-weight:400">Section</th><th ${th}>Area (cm²)</th><th ${th}>Mach</th><th ${th}>Velocity (m/s)</th><th ${th}>Choke margin (%)</th><th ${th}>Pt drop (kPa)</th></tr>${CR.map(([n,o])=>tr(n,fm(o.A,3),fm(o.M,3),fm(o.V,3),fm(o.mg,3),fm(o.dp,3))).join('')}${tr('Exit nozzle (area needed)',fm(Areq,3),okp?fm(Me,3):'–','–','–','–')}</table></div><p class="mu" style="margin:6px 0 0">Add areas under Cycle inputs to fill in the first rows. Choke margin is how much more flow the section could pass before it chokes.</p>`;
+  const A0=p.M>0?s.mt/(p.Pa*1000/(287*p.Ta)*p.M*Math.sqrt(1.4*287*p.Ta))*1e4:NaN;
+  LAST.summary=[['Flight','Mach number',p.M,''],['Flight','Ambient static temperature',p.Ta,'K'],['Flight','Ambient static pressure',p.Pa,'kPa'],['Mode','Operating mode','ACM',''],['Flow','Air flow',s.mt,'kg/s'],['Turbine','MFP',s.mfpt,''],['Turbine','Pressure ratio',s.pt,''],['Turbine','Temperature ratio',s.tt,''],['Turbine','Isentropic efficiency (calculated)',s.et,''],['Turbine','Work after mechanical efficiency',s.Wt,'kW'],['Compressor','MFP',s.mfpc,''],['Compressor','Pressure ratio',s.pc,''],['Compressor','Temperature ratio',s.tc,''],['Compressor','Isentropic efficiency (calculated)',s.ec,''],['Compressor','Work',s.Wc,'kW'],['System','Heat absorbed',Q,'kW'],['System','Exit Mach',okp?Me:'',''],['System','Ram inlet capture area',A0,'cm2'],['System','Air can leave (1 = yes)',okp?1:0,'']].concat(F.map(([k,l])=>['Input',l,g(k),'']));
+  LAST.stations=[['Ram inlet',fl.T0,fl.T1,fl.P0,fl.P1],['Turbine',fl.T1,s.T2,fl.P1,s.P2],['Heat exchanger',s.T2,s.T3,s.P2,s.P3a],['Duct',s.T3,s.T3,s.P3a,s.P3],['Compressor',s.T3,s.T4,s.P3,s.P4],['Exit duct',s.T4,s.T4,s.P4,s.P5]];
+  const row=(n,a,b,c,d)=>`<tr><td style="padding:4px 10px 4px 0;text-align:left">${n}</td><td>${fm(a,5)}</td><td>${fm(b,5)}</td><td>${fm(c,5)}</td><td>${fm(d,5)}</td></tr>`;
+  h=`<div class="status ${okp&&!w.length?'ok':'wn'}">${okp?`Work and flow matched at turbine π ${fm(s.pt)} and compressor π ${fm(s.pc)}. Compressor outlet pressure is ${fm(s.P5,5)} kPa against ${fm(p.Pa,5)} kPa ambient, so the air can leave.`:`Work and flow match, but compressor outlet pressure (${fm(s.P5,5)} kPa) is below ambient (${fm(p.Pa,5)} kPa), so the air cannot leave. Raise the flight Mach number, cut the heat added or the losses, or use a compressor with more pressure rise.`} ${w.join(' ')}</div>${nt.length?`<p class="mu" style="margin:0 0 10px">${nt.join(' ')}</p>`:''}
+  <div class="grp"><h3><span class="dot" style="background:var(--t)"></span>Turbine</h3>${K('MFP',fm(s.mfpt))}${K('Pressure ratio π',fm(s.pt))}${K('Temperature ratio τ',fm(s.tt))}${K('Isentropic η',fm(s.et*100,3),'%')}${K('Work × ηm',fm(s.Wt,4),'kW')}</div>
+  <div class="grp"><h3><span class="dot" style="background:var(--c)"></span>Compressor</h3>${K('MFP',fm(s.mfpc))}${K('Pressure ratio π',fm(s.pc))}${K('Temperature ratio τ',fm(s.tc))}${K('Isentropic η',fm(s.ec*100,3),'%')}${K('Work',fm(s.Wc,4),'kW')}</div>
+  <div class="grp"><h3>System</h3>${K('Air flow ṁ',fm(s.mt),'kg/s')}${K('Heat absorbed',fm(Q,4),'kW')}${K('Exit Mach',okp?(ch?'1 (choked)':fm(Me,3)):'–')}${K('Ram inlet capture area',fm(A0,3),'cm²')}</div>
+  <h3 style="font-size:.9rem;margin:10px 0 4px">Total temperature and total pressure at each object</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap"><tr style="color:var(--mu)"><th style="text-align:left;font-weight:400">Object (stations)</th><th style="font-weight:400">Tt in (K)</th><th style="font-weight:400">Tt out (K)</th><th style="font-weight:400">Pt in (kPa)</th><th style="font-weight:400">Pt out (kPa)</th></tr>
+  ${row('Ram inlet (0→1)',fl.T0,fl.T1,fl.P0,fl.P1)}${row('Turbine (1→2)',fl.T1,s.T2,fl.P1,s.P2)}${row('Heat exchanger (2→3)',s.T2,s.T3,s.P2,s.P3a)}${row('Duct (3→4)',s.T3,s.T3,s.P3a,s.P3)}${row('Compressor (4→5)',s.T3,s.T4,s.P3,s.P4)}${row('Exit duct (5→6)',s.T4,s.T4,s.P4,s.P5)}</table></div>${FC}${MPH}${SOLH}`}
+ if(useBy){h=byHtml(by,p,fl);s=null;if(by)LAST={summary:[['Flight','Mach number',p.M,''],['Flight','Ambient static temperature',p.Ta,'K'],['Flight','Ambient static pressure',p.Pa,'kPa'],['Mode','Operating mode','Ram air only',''],['Flow','Air flow',by.m,'kg/s'],['Ram air','Air temperature rise',by.dT,'K'],['Ram air','Heat absorbed',by.Q,'kW'],['Ram air','Exit Mach',by.Me,'']].concat(F.map(([k,l])=>['Input',l,g(k),''])),stations:[['Ram inlet',fl.T0,fl.T1,fl.P0,fl.P1],['Heat exchanger',fl.T1,by.To,fl.P1,by.P2],['Duct',by.To,by.To,by.P2,by.P3],['Exit duct',by.To,by.To,by.P3,by.P4]],solutions:[]}}
+ const mr=D.tp.map(r=>r[1]),f1=fl.P1*1000/Math.sqrt(fl.T1)/p.kt;
+ if(!useBy)h+=`<p class="mu" style="margin:8px 0 0">Turbine data implies ṁ from ${fm(Math.min(...mr)*f1,3)} to ${fm(Math.max(...mr)*f1,3)} kg/s at these ram conditions. If that looks wrong, check the MFP unit factor.</p>`;
+ $('res').innerHTML=h;
+ {const nn=NaN,pr=s?s.P5/p.Pa:nn;$('sys').innerHTML=sysSvg({M:p.M,dT:s?s.T3-s.T2:p.dT,T:[fl.T0,fl.T1].concat(s?[s.T2,s.T3,s.T3,s.T4,s.T4]:[nn,nn,nn,nn,nn]),P:[fl.P0,fl.P1].concat(s?[s.P2,s.P3a,s.P3,s.P4,s.P5]:[nn,nn,nn,nn,nn]),pt:s?s.pt:nn,pc:s?s.pc:nn,mt:s?s.mt:nn,Q:s?s.mt*p.cpc*(s.T3-s.T2):nn,W:s?s.Wc:nn,Me:pr>1?(pr>=1.8929?1:Math.sqrt(5*(Math.pow(pr,1/3.5)-1))):nn})}
+ envStart(p,D);
+ const CC='var(--c)',CT='var(--t)',efc=(t,e)=>t.map(r=>{const x=ip(e,r[1],1).v;return[r[0],(Math.pow(r[0],(p.gc-1)/p.gc)-1)/(x-1)]}),eft=(t,e)=>t.map(r=>{const x=ip(e,r[1],1).v;return[r[0],(1-x)/(1-Math.pow(r[0],-(p.gt-1)/p.gt))]});
+ chart('c1',[{p:D.cp,c:CC,s:0,d:1,m:s&&[s.pc,s.mfpc]},{p:efc(D.cp,D.ce),c:CC,s:1,d:1,dash:1,m:s&&[s.pc,s.ec]}],'Compressor π');
+ chart('c2',[{p:D.tp,c:CT,s:0,d:1,m:s&&[s.pt,s.mfpt]},{p:eft(D.tp,D.te),c:CT,s:1,d:1,dash:1,m:s&&[s.pt,s.et]}],'Turbine π');
+ if(ok.length)chart('c3',[{p:ok.map(o=>[o.x,o.r.C*100]),c:'var(--tx)',s:0,z:1,m:s&&[s.pt,0]}],'Turbine π');else $('c3').innerHTML='';
+}
+function run(){try{calc();$('stamp').textContent='Updated '+new Date().toLocaleTimeString()}catch(e){$('res').innerHTML='<div class="status wn">Calculation error: '+e.message+'. Check the inputs and data rows.</div>'}}
+$('fc').addEventListener('change',e=>loadMap(e.target,'cp','ce','Compressor'));
+$('ft').addEventListener('change',e=>loadMap(e.target,'tp','te','Turbine'));
+$('exp').addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ex]');if(b)exportCsv(b.dataset.ex)});
+document.querySelectorAll('.go').forEach(b=>b.addEventListener('click',()=>{ROOT=0;run()}));
+$('res').addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-root]');if(b){ROOT=+b.dataset.root;run()}});
+$('env').addEventListener('click',e=>{const c=cellAt(e);if(c)pickCell(c)});
+$('env').addEventListener('pointermove',e=>{const c=cellAt(e);$('hov').textContent=c?`Mach ${c.M.toFixed(2)}, ${c.al.toFixed(1)} km: ${EN[c.k]}. ${c.why}`:''});
+$('ov').addEventListener('change',()=>{if(ENV)$('env').innerHTML=envDraw()});
+run();
+</script></body></html>
